@@ -1,4 +1,4 @@
-
+// received help from Mariah
 #include <stdio.h>
 
 #include <pthread.h>
