@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+//receieved help from Mariah
+
 #define SIZE 9
 
 // Sudoku board. Modify this to test your checker!
