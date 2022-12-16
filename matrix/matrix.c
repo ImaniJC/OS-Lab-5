@@ -62,6 +62,7 @@ void* computeDiff(void* args) { int core = *(int*) args;
 }
 
 
+
 // Fetches the appropriate coordinates from the argument, and sets
 // the cell of matSumResult at the coordinates to the inner product
 // of matA and matB.
