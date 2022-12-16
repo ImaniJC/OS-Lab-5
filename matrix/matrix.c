@@ -98,6 +98,7 @@ int main() {
     printMatrix(matB);
     
     // 3. Create pthread_t objects for our threads.
+    pthread_t threads[MAX];
     
     // 4. Create a thread for each cell of each matrix operation.
     // 
@@ -107,8 +108,27 @@ int main() {
     // One way to do this is to malloc memory for the thread number i, populate the coordinates
     // into that space, and pass that address to the thread. The thread will use that number to calcuate 
     // its portion of the matrix. The thread will then have to free that space when it's done with what's in that memory.
+    size_t i, k;
+     struct v **values;
+     values = (struct v **)malloc(MAX * sizeof(struct v*));
+
+    for(i = 0; i < MAX; i++)
+    {
+      values[i] = (struct v *)malloc(MAX * sizeof(struct v));
+      for(k = 0; k < MAX; k++) {
+        values[i][k].i = i;
+        values[i][k].j = k;
+      }
+      pthread_create(&threads[i], NULL, computeProduct, values[i]);
+      pthread_create(&threads[i], NULL, computeSum, values[i]);
+      pthread_create(&threads[i + MAX], NULL, computeDiff, values[i]);
+    }
+    free(values);
     
     // 5. Wait for all threads to finish.
+    for(i = 0; i < MAX; i++) {
+      pthread_join(threads[i], NULL);
+    }
     
     // 6. Print the results.
     printf("Results:\n");
