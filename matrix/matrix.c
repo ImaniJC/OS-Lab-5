@@ -10,7 +10,13 @@ int matSumResult[MAX][MAX];
 int matDiffResult[MAX][MAX]; 
 int matProductResult[MAX][MAX]; 
 
+#define MAX 4;
 int MAX;
+
+struct v {
+  size_t i;
+  size_t j;
+};
 
 void fillMatrix(int matrix[MAX][MAX]) {
     for(int i = 0; i<MAX; i++) {
@@ -33,22 +39,47 @@ void printMatrix(int matrix[MAX][MAX]) {
 // Fetches the appropriate coordinates from the argument, and sets
 // the cell of matSumResult at the coordinates to the sum of the
 // values at the coordinates of matA and matB.
-void* computeSum(void* args) { // pass in the number of the ith thread
-    return NULL;
+void* computeSum(void* args) { int core = *(int*)args;
+  for (int i = core * MAX / 4; i < (core + 1) * MAX / 4; i++) {
+    for (int j = 0; j < MAX; j++) {
+      matSumResult[i][j] = matA[i][j] + matB[i][j];
+     }
+  }
+  
+  return NULL;
 }
-
 // Fetches the appropriate coordinates from the argument, and sets
 // the cell of matSumResult at the coordinates to the difference of the
 // values at the coordinates of matA and matB.
-void* computeDiff(void* args) { // pass in the number of the ith thread
-    return NULL;
+void* computeDiff(void* args) { int core = *(int*) args;
+  for (int i = core * MAX / 4; i < (core + 1) * MAX / 4; i++) {
+    for (int j = 0; j < MAX; j++) {
+      matDiffResult[i][j] = matA[i][j] - matB[i][j];
+    }
+  }
+  
+  return NULL;
 }
+
 
 // Fetches the appropriate coordinates from the argument, and sets
 // the cell of matSumResult at the coordinates to the inner product
 // of matA and matB.
-void* computeProduct(void* args) { // pass in the number of the ith thread
-    return NULL;
+void* computeProduct(void* args) { struct v *data = (struct v *)args;
+  size_t l,d;
+  for(l=0; l < MAX; l++) {
+    size_t i=(data[l]).i;
+    size_t j=(data[l]).j;
+    double sum = 0;
+    for (d = 0; d < MAX; d++) {
+      sum = sum + matA[i][d]*matB[d][j];
+    }
+    
+    matProductResult[i][j] = sum;
+    sum = 0;
+  }
+    
+  return NULL;
 }
 
 // Spawn a thread to fill each cell in each result matrix.
@@ -90,3 +121,6 @@ int main() {
     return 0;
   
 }
+
+
+
