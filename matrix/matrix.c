@@ -91,6 +91,9 @@ int main() {
     // 0. Get the matrix size from the command line and assign it to MAX
     
     // 1. Fill the matrices (matA and matB) with random values.
+		fillMatrix(matA);
+    fillMatrix(matB);
+
     
     // 2. Print the initial matrices.
     printf("Matrix A:\n");
@@ -142,6 +145,3 @@ int main() {
     return 0;
   
 }
-
-
-
